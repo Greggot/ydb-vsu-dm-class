@@ -1,0 +1,34 @@
+@keyframes appear { 
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+}
+td {
+    font-family: 'arial';
+    animation: appear 0.7s;
+}
+
+@keyframes slide { 
+    0% { 
+        opacity: 0; 
+        transform: translateY(-50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}
+.error_message {
+    color: #ff4076;
+    font-family: 'arial black';
+    font-size: 14px;
+    margin-left: 75px;
+    opacity: 1;
+    animation: slide 0.7s;
+}
+
+th {
+    font-family: 'arial black';
+    font-size: 14px;
+    opacity: 1;
+    animation: slide 0.7s;
+}

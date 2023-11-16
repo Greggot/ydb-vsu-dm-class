@@ -1,0 +1,58 @@
+<html>
+<head>
+	<script type="text/javascript" src="car.js"></script>
+	<script type="text/javascript" src="script.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#search_button').hide();
+            $("#car_table").hide();
+			$('.error_message').hide();
+
+			$.ajax({
+				url: ydb_url,
+				method: 'GET',
+                data: {
+                    "data": "automobile_list"
+                },
+				success: function(data){ 
+                    console.log(preconvert_json(data))
+                    console.log(JSON.parse(preconvert_json(data)))
+                    $("#car_table").show();
+                    $('#search_button').show();
+                    update_car_list(data)    
+                }
+			}).fail(function(data){
+                output_error("GET request failed");
+            })
+
+            $.ajax({
+				url: ydb_url,
+				method: 'POST',
+				success: function(data){ 
+                    console.log(data); 
+                }
+			}).fail(function(data){
+                output_error("POST request failed");
+            })
+		});
+	</script>
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<div class='error_message'>Not found</div> 
+
+	<table id='car_table'>
+		<tr>
+			<th>ID</th>
+			<th>Номер автомобиля</th>
+			<th>Модель</th>
+		</tr>
+	</table>
+
+	<script type="text/javascript">
+	</script>
+
+</body>
+</html>
