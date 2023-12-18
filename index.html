@@ -3,46 +3,44 @@
 	<script type="text/javascript" src="car.js"></script>
 	<script type="text/javascript" src="script.js"></script>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	
 	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#search_button').hide();
-            $("#car_table").hide();
+		$(document).ready(function () {
+			$("#car_table").hide();
 			$('.error_message').hide();
+			$("#car_create_form").hide();
 
-			$.ajax({
-				url: ydb_url,
-				method: 'GET',
-                data: {
-                    "data": "automobile_list"
-                },
-				success: function(data){ 
-                    console.log(preconvert_json(data))
-                    console.log(JSON.parse(preconvert_json(data)))
-                    $("#car_table").show();
-                    $('#search_button').show();
-                    update_car_list(data)    
-                }
-			}).fail(function(data){
-                output_error("GET request failed");
-            })
+			// Инициализация имеющихся в БД данных
+			receive_update_car_list();
+			update_model_selection();
+			
+			// Событие нажатие на кнопку "Создать..."
+			$('#car_create_form_button').click(function () {
+				$('#car_create_form_button').hide();
+				$('#car_create_form').show();
+			});
 
-            $.ajax({
-				url: ydb_url,
-				method: 'POST',
-				success: function(data){ 
-                    console.log(data); 
-                }
-			}).fail(function(data){
-                output_error("POST request failed");
-            })
+			// Событие подтверждения формы ввода
+			$("#car_create_form").on("submit", function (event) {
+				$('#car_create_form_button').show();
+				$('#car_create_form').hide();
+				create_new_car(
+					$('#car_model_select option:selected').text(),
+					$('#car_number_input').val());
+				// Таким образом мы не перезагружаем страницу при нажатии на submit
+				event.preventDefault();
+			});
 		});
 	</script>
 	<link rel="stylesheet" href="styles.css">
+
 </head>
-
 <body>
-	<div class='error_message'>Not found</div> 
 
+	<!-- Сообщение об ошибке -->
+	<div class='error_message'>Not found</div>
+
+	<!-- Таблица, в которую попадают отображения сущностей -->
 	<table id='car_table'>
 		<tr>
 			<th>ID</th>
@@ -51,8 +49,17 @@
 		</tr>
 	</table>
 
-	<script type="text/javascript">
-	</script>
+	<!-- Кнопка, которая показывает форму -->
+	<button type="button" , id="car_create_form_button">Create...</button>
+
+	<!-- Форма добавления сущности, изначально скрыта -->
+	<form id="car_create_form">
+		<label for="model">Model-Name:</label>
+
+		<select name="model" id="car_model_select" />
+		<input type="text" id="car_number_input"><br><br>
+		<input type="submit" value="Submit">
+	</form>
 
 </body>
 </html>
